@@ -1,0 +1,113 @@
+swagger: "2.0"
+
+info:
+  description: ""
+  version: "0.1"
+  title: "Payments REST API"
+
+
+consumes:
+  - application/x-www-form-urlencoded
+produces:
+  - application/json
+
+
+parameters:
+
+  objId:
+    name: id
+    in: path
+    description: SHA256 hash of the payment
+    required: true
+    type: string
+    maxLength: 64
+
+  objJSON:
+    name: object
+    in: body
+    description: additional open payment attributes in JSON format
+    required: true
+    schema:
+      type: object
+
+
+paths:
+
+  /{id}:
+
+    post:
+      operationId: create
+      summary: Create Payment
+      consumes:
+      - application/json
+      parameters:
+      - $ref: '#/parameters/objId'
+      - $ref: '#/parameters/objJSON'
+      responses:
+        201:
+          description: Created
+        400:
+          description: Parameter Mismatch
+        409:
+          description: Already Exists
+
+    get:
+      operationId: read
+      summary: Read Payment
+      parameters:
+      - $ref: '#/parameters/objId'
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+        400:
+          description: Parameter Mismatch
+        404:
+          description: Not Found
+
+    put:
+      operationId: update
+      summary: Update Payment
+      consumes:
+      - application/json
+      parameters:
+      - $ref: '#/parameters/objId'
+      - $ref: '#/parameters/objJSON'
+      responses:
+        204:
+          description: Updated
+        400:
+          description: Parameter Mismatch
+        404:
+          description: Not Found
+
+    delete:
+      operationId: delete
+      summary: Delete Payment
+      parameters:
+      - $ref: '#/parameters/objId'
+      responses:
+        204:
+          description: Deleted
+        400:
+          description: Parameter Mismatch
+        404:
+          description: Not Found
+
+
+  /:
+
+    get:
+      operationId: list
+      summary: List Payments
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              ids:
+                type: array
+                items:
+                  type: string
