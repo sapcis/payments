@@ -2,8 +2,8 @@ swagger: "2.0"
 
 info:
   description: ""
-  version: "0.1-alpha"
-  title: "Payments REST API"
+  version: "0.2"
+  title: "Payments register REST API"
 
 
 consumes:
