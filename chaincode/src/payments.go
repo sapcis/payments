@@ -81,6 +81,9 @@ func (cc *PaymentsChaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Respo
 
 	function, args := stub.GetFunctionAndParameters()
 
+	if err := stub.SetEvent(function, []byte(args[1])); err != nil {
+		return shim.Error(err.Error())
+	}
 	switch strings.ToLower(function) {
 	case "create":
 		return cc.create(stub, args)

@@ -2,7 +2,7 @@ swagger: "2.0"
 
 info:
   description: ""
-  version: "0.2"
+  version: "0.3"
   title: "Payments register REST API"
 
 
