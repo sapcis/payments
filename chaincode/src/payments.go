@@ -81,9 +81,6 @@ func (cc *PaymentsChaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Respo
 
 	function, args := stub.GetFunctionAndParameters()
 
-	if err := stub.SetEvent(function, []byte(args[1])); err != nil {
-		return shim.Error(err.Error())
-	}
 	switch strings.ToLower(function) {
 	case "create":
 		return cc.create(stub, args)
@@ -112,6 +109,9 @@ func (cc *PaymentsChaincode) create(stub shim.ChaincodeStubInterface, args []str
 	}
 
 	if err := stub.PutState(args[0], []byte(args[1])); err == nil {
+		if err := stub.SetEvent("create", []byte(args[1])); err != nil {
+			return shim.Error(err.Error())
+		}
 		return Success(http.StatusCreated, "Created", nil)
 	} else {
 		return Error(http.StatusInternalServerError, err.Error())
@@ -142,6 +142,9 @@ func (cc *PaymentsChaincode) update(stub shim.ChaincodeStubInterface, args []str
 	}
 
 	if err := stub.PutState(args[0], []byte(args[1])); err == nil {
+		if err := stub.SetEvent("update", []byte(args[1])); err != nil {
+			return shim.Error(err.Error())
+		}
 		return Success(http.StatusNoContent, "Updated", nil)
 	} else {
 		return Error(http.StatusInternalServerError, err.Error())
@@ -159,6 +162,9 @@ func (cc *PaymentsChaincode) delete(stub shim.ChaincodeStubInterface, args []str
 	}
 
 	if err := stub.DelState(args[0]); err == nil {
+		if err := stub.SetEvent("delete", []byte(args[0])); err != nil {
+			return shim.Error(err.Error())
+		}
 		return Success(http.StatusNoContent, "Deleted", nil)
 	} else {
 		return Error(http.StatusInternalServerError, err.Error())
